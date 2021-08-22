@@ -3,6 +3,7 @@ package resource
 import (
 	"bytes"
 	"net"
+	"strconv"
 
 	"github.com/kseleven/haul/pkg/util"
 )
@@ -43,4 +44,18 @@ func readRdata(data []byte, qType QType, src []byte) string {
 	default:
 		return "unknown type:" + qType.String()
 	}
+}
+
+func (r Recode) String() string {
+	var buf bytes.Buffer
+	buf.WriteString(r.Name)
+	buf.WriteString("\t\t")
+	buf.WriteString(strconv.FormatUint(uint64(r.TTL), 10))
+	buf.WriteString("\t")
+	buf.WriteString(r.Class.String())
+	buf.WriteString("\t")
+	buf.WriteString(r.Type.String())
+	buf.WriteString("\t")
+	buf.WriteString(r.Rdata)
+	return buf.String()
 }

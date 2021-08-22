@@ -1,9 +1,9 @@
 package service
 
 import (
-	"encoding/hex"
 	"fmt"
 	"net"
+	"time"
 
 	"github.com/kseleven/haul/pkg/resource"
 )
@@ -21,40 +21,51 @@ func Request(r resource.Request) error {
 	}
 	defer conn.Close()
 
+	beginTime := time.Now()
 	if err := writeMsg(conn, r); err != nil {
 		return err
 	}
-
 	data := make([]byte, 512)
 	length, rAddr, err := conn.ReadFromUDP(data)
 	if err != nil {
 		return err
 	}
-	fmt.Println(rAddr, length, hex.Dump(data[:length]))
-	ReadMsg(data[:length])
-	return nil
+
+	return ReadMsg(data[:length], rAddr, time.Now().Sub(beginTime))
 }
 
-func ReadMsg(data []byte) {
+func ReadMsg(data []byte, rAddr *net.UDPAddr, spendTime time.Duration) error {
 	message := &resource.Message{}
 	message.Decode(data)
-	fmt.Printf("head section:%+v\n", message.Header)
-	fmt.Printf("question section:%+v\n", message.Question)
-	for _, answer := range message.Answers {
-		fmt.Printf("answers section:%+v\n", answer)
+
+	fmt.Printf("Server: %s\n", rAddr.String())
+	fmt.Printf("Query Time: %s\n", spendTime)
+	fmt.Printf("When: %s\n", time.Now().Format(time.RFC3339))
+	fmt.Printf("Message Size Recvd: %d \n\n", len(data))
+	fmt.Println(message.Header)
+	fmt.Println(message.Question)
+	if len(message.Answers) > 0 {
+		fmt.Println("Answer Section:")
+		for _, answer := range message.Answers {
+			fmt.Println(answer.String())
+		}
 	}
-	for _, authority := range message.Authority {
-		fmt.Printf("authority section:%+v\n", authority)
+
+	if len(message.Authority) > 0 {
+		fmt.Println("Authority Section:")
+		for _, authority := range message.Authority {
+			fmt.Println(authority.String())
+		}
 	}
+
+	return nil
 }
 
 func writeMsg(conn *net.UDPConn, r resource.Request) error {
 	message := resource.NewMessage(r.QName, r.QType)
-	n, err := conn.Write(message.Encode())
-	if err != nil {
-		return fmt.Errorf("write message failed:%s", err.Error())
+	if _, err := conn.Write(message.Encode()); err != nil {
+		return fmt.Errorf("send message failed:%s", err.Error())
 	}
-	fmt.Println("write length", n)
 
 	return nil
 }

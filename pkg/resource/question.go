@@ -31,6 +31,18 @@ func (q Question) Decode(data, src []byte) (Question, []byte) {
 	return q, buf.Bytes()
 }
 
+func (q Question) String() string {
+	var buf bytes.Buffer
+	buf.WriteString("Question Section:\n")
+	buf.WriteString(q.QName)
+	buf.WriteString("\t\t\t")
+	buf.WriteString(q.QClass.String())
+	buf.WriteString("\t")
+	buf.WriteString(q.QType.String())
+	buf.WriteString("\n")
+	return buf.String()
+}
+
 type QType uint16
 
 func (q QType) String() string {

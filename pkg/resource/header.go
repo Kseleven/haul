@@ -2,6 +2,7 @@ package resource
 
 import (
 	"bytes"
+	"strconv"
 
 	"github.com/kseleven/haul/pkg/util"
 )
@@ -58,6 +59,28 @@ func (h Header) Decode(data []byte) Header {
 	h.ArCount = util.BytesToUint16(buf.Next(2))
 
 	return h
+}
+
+func (h Header) String() string {
+	var buf bytes.Buffer
+	buf.WriteString("Header Section:\n")
+	buf.WriteString("opcode: ")
+	buf.WriteString(h.Opcode.String())
+	buf.WriteString(", status: ")
+	buf.WriteString(h.Rcode.String())
+	buf.WriteString(", id: ")
+	buf.WriteString(strconv.FormatUint(uint64(h.ID), 10))
+	buf.WriteString("\n")
+	buf.WriteString("Flags:")
+	buf.WriteString(" Query: ")
+	buf.WriteString(strconv.FormatUint(uint64(h.QdCount), 10))
+	buf.WriteString(", Answer: ")
+	buf.WriteString(strconv.FormatUint(uint64(h.AnCount), 10))
+	buf.WriteString(", Authority: ")
+	buf.WriteString(strconv.FormatUint(uint64(h.NsCount), 10))
+	buf.WriteString(", Additional: ")
+	buf.WriteString(strconv.FormatUint(uint64(h.ArCount), 10))
+	return buf.String()
 }
 
 const (
