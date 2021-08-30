@@ -8,19 +8,19 @@ import (
 )
 
 type Header struct {
-	ID      uint16 `json:"id"`      //16 bit
-	QR      byte   `json:"qr"`      //1 bit
-	Opcode  Opcode `json:"opcode"`  //4 bit
-	AA      byte   `json:"aa"`      //1 bit
-	TC      byte   `json:"tc"`      //1 bit
-	RD      byte   `json:"rd"`      //1 bit
-	RA      byte   `json:"ra"`      //1 bit
-	Z       byte   `json:"z"`       //3 bit
-	Rcode   Rcode  `json:"rcode"`   //4 bit
-	QdCount uint16 `json:"qdCount"` //16 bit
-	AnCount uint16 `json:"anCount"` //16 bit
-	NsCount uint16 `json:"nsCount"` //16 bit
-	ArCount uint16 `json:"arCount"` //16 bit
+	ID      uint16 `json:"id"`
+	QR      byte   `json:"qr"`
+	Opcode  Opcode `json:"opcode"`
+	AA      byte   `json:"aa"`
+	TC      byte   `json:"tc"`
+	RD      byte   `json:"rd"`
+	RA      byte   `json:"ra"`
+	Z       byte   `json:"z"`
+	Rcode   Rcode  `json:"rcode"`
+	QdCount uint16 `json:"qdCount"`
+	AnCount uint16 `json:"anCount"`
+	NsCount uint16 `json:"nsCount"`
+	ArCount uint16 `json:"arCount"`
 }
 
 func (h Header) Encode() []byte {

@@ -9,12 +9,12 @@ import (
 )
 
 type Recode struct {
-	Name     string `json:"name"`     // variable bits
-	Type     QType  `json:"type"`     // 16 bits
-	Class    QClass `json:"class"`    // 16 bits
-	TTL      uint32 `json:"ttl"`      // 32 bits
-	RdLength uint16 `json:"rdLength"` // 16 bits
-	Rdata    string `json:"rdata"`    // variable bits
+	Name     string `json:"name"`
+	Type     QType  `json:"type"`
+	Class    QClass `json:"class"`
+	TTL      uint32 `json:"ttl"`
+	RdLength uint16 `json:"rdLength"`
+	Rdata    string `json:"rdata"`
 }
 
 func (r Recode) Decode(data, src []byte) (Recode, []byte) {

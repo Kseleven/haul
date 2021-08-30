@@ -67,8 +67,8 @@ func ParseDomainName(data []byte, src []byte) (string, int) {
 		i           byte
 	)
 
-	total := len(data)
-	buf.Grow(total)
+	bufLength := len(data)
+	buf.Grow(bufLength)
 	buf.Write(data)
 	if labelLength = buf.Next(1)[0]; IsLabelPointer(labelLength) {
 		offset := buf.Next(1)[0]
@@ -83,12 +83,12 @@ readBuf:
 	}
 	nameBuf.WriteByte(Dot)
 	if labelLength = buf.Next(1)[0]; labelLength == 0 {
-		return nameBuf.String(), total - buf.Len()
+		return nameBuf.String(), bufLength - buf.Len()
 	} else if IsLabelPointer(labelLength) {
 		offset := buf.Next(1)[0]
 		name, _ := ParseDomainName(src[offset:], src)
 		nameBuf.WriteString(name)
-		return nameBuf.String(), total - buf.Len()
+		return nameBuf.String(), bufLength - buf.Len()
 	} else {
 		goto readBuf
 	}

@@ -6,9 +6,9 @@ import (
 )
 
 type Question struct {
-	QName  string `json:"qName"`  //variable bit
-	QType  QType  `json:"qType"`  //16 bit
-	QClass QClass `json:"qClass"` //16 bit
+	QName  string `json:"qName"`
+	QType  QType  `json:"qType"`
+	QClass QClass `json:"qClass"`
 }
 
 func (q Question) Encode() []byte {
